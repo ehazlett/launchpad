@@ -1,0 +1,12 @@
+{
+    "name": "myrepo",
+    "commands": [
+        "git clone https://github.com/myuser/myrepo.git",
+        "cp myrepo/* /var/www/"
+    ],
+    "notifications": {
+        "email": [
+            "user@example.com"
+        ]
+    }
+}
