@@ -2,15 +2,15 @@
 Launchpad is a web application that will perform operations on receipt of a VCS event, currently Github.  It works by specifying a configuration file that contains commands you want to execute.  After a post-receive hook is setup in Github (click on the "Admin" tab of your repo), Launchpad will run the operations -- for example, a deployment.
 
 #Setup
-Launchpad requires Redis.  Make sure you have it available and enter the connection information in `config.py`.  If Redis is running on localhost:6379 you won't have to do anything.
+Launchpad requires Redis.  Make sure you have it available and enter the connection information in `config.py`.  If Redis is running on `localhost:6379` you won't have to do anything.
 
-* pip install -r requirements.txt
-* python application.py
+* `pip install -r requirements.txt`
+* `python application.py`
 
 You will need to make your app publicly available in order to test the Github hooks -- a quick and easy way is with http://showoff.io.
 
 #Configuration Files
-By default, Launchpad does nothing -- you have to specify a configuration file (per repository) with commands (commands are executed in the order listed).  Here is an example:
+By default, Launchpad does nothing -- you have to specify a configuration file (per repository) with commands (commands are executed in the order listed) and place that file in the `conf` directory.  Here is an example:
 
 ```javascript
 {
