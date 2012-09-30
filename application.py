@@ -12,7 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from flask import request, json
+from flask import request, json, redirect, url_for
 from flask.ext.mail import Mail
 from flask.ext import redis
 from utils import generate_api_response
@@ -75,6 +75,17 @@ def actions():
     actions = []
     [actions.append(json.loads(redis.get(x))) for x in keys]
     return generate_api_response(actions)
+
+@app.route('/actions/clear')
+def actions_clear():
+    name = request.args.get('name')
+    if name:
+        key = 'actions:{0}:*'.format(name)
+    else:
+        key = 'actions:*'
+    keys = redis.keys(key)
+    [redis.delete(x) for x in keys]
+    return redirect(url_for('actions'))
 
 # ----- utility functions
 if __name__=='__main__':

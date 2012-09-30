@@ -1,5 +1,5 @@
 #Launchpad
-Launchpad is a web application that will perform operations on receipt of a VCS event, currently Github.  It works by specifying a configuration file that contains commands you want to execute.  After a post-receive hook is setup in Github (click on the "Admin" tab of your repo), Launchpad will run the operations -- for example, a deployment.
+Launchpad is a web application that will perform operations on receipt of a VCS notification, currently Github.  It works by specifying a configuration file that contains commands you want to execute.  After a post-receive hook is setup in Github (click on the "Admin" tab of your repo), Launchpad will run the operations -- for example, a deployment.
 
 #Setup
 Launchpad requires Redis.  Make sure you have it available and enter the connection information in `config.py`.  If Redis is running on `localhost:6379` you won't have to do anything.
