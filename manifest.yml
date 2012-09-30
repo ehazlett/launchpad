@@ -1,0 +1,16 @@
+---
+applications:
+  .:
+    name: launchpad
+    framework:
+      name: wsgi
+      info:
+        mem: 64M
+        description: Python WSGI Application
+        exec: 
+    url: ${name}.${target-base}
+    mem: 64M
+    instances: 1
+    services:
+      redis-launchpad:
+        type: redis

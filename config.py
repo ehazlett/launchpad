@@ -12,15 +12,26 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import os
 from flask import Flask
 import logging
 
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+
 APP_NAME = 'launchpad'
 APP_VERSION = '0.1'
+CONF_DIR = os.path.join(PROJECT_ROOT, 'conf')
 INTERNAL_API_KEYS = (
     'arcus-default-key',
 )
 LOG_LEVEL = logging.DEBUG
+MAIL_SERVER = 'localhost'
+MAIL_PORT = 25
+MAIL_USE_TLS = False
+MAIL_USE_SSL = False
+MAIL_USERNAME = None
+MAIL_PASSWORD = None
+DEFAULT_MAIL_SENDER = 'launchpad@example.com'
 REDIS_HOST = 'localhost'
 REDIS_PORT = 6379
 REDIS_DB = 12

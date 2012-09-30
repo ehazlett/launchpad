@@ -1,12 +1,16 @@
 {
-    "name": "myrepo",
-    "commands": [
-        "git clone https://github.com/myuser/myrepo.git",
-        "cp myrepo/* /var/www/"
-    ],
-    "notifications": {
-        "email": [
-            "user@example.com"
-        ]
-    }
+  "name": "example",
+  "commands": [
+    "git clone https://github.com/myuser/myrepo.git",
+    "cp myrepo/* /var/www/"
+  ],
+  "environment": {
+    "MY_USER": "123456",
+    "MY_PASS": "abcdefg"
+  },
+  "notifications": {
+    "email": [
+      "user@example.com"
+    ]
+  }
 }

@@ -12,6 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import os
 import hashlib
 from flask import current_app, request, Response, json
 from urlparse import urlparse, urljoin
@@ -58,7 +59,7 @@ def hash_text(text):
     h.update(text)
     return h.hexdigest()
 
-def send_mail(subject=None, text=None, to=[]):
+def send_mail(subject=None, text='', to=[]):
     """
     Sends mail
 
@@ -67,11 +68,35 @@ def send_mail(subject=None, text=None, to=[]):
     :param to: Recipients as list
 
     """
-    mail = current_app.config.get('mail')
-    msg = Message(subject, sender=current_app.config.get('DEFAULT_SENDER'), \
-        recipients=to)
-    msg.body = text
-    return mail.send(msg)
+    try:
+        mail = current_app.config.get('mail')
+        msg = Message(subject, sender=current_app.config.get('DEFAULT_MAIL_SENDER'), \
+            recipients=to)
+        msg.body = text
+        res = mail.send(msg)
+    except RuntimeError: # working out of request context
+        import smtplib
+        session = smtplib.SMTP(getattr(config, 'MAIL_SERVER'), \
+            getattr(config, 'MAIL_PORT'))
+        session.ehlo()
+        if getattr(config, 'MAIL_USE_TLS'):
+           session.starttls()
+           session.ehlo()
+        username, password = getattr(config, 'MAIL_USERNAME'), getattr(config, \
+            'MAIL_PASSWORD')
+        if username:
+            session.login(username, password)
+        sender = getattr(config, 'DEFAULT_MAIL_SENDER')
+        msg = [
+            'From: ' +  sender,
+            'Subject: ' + subject,
+            'To: ' + ','.join(to),
+            '',
+            text,
+        ]
+        res = session.sendmail(sender, to, '\r\n'.join(msg))
+        session.quit()
+    return res
 
 def is_safe_url(target):
     ref_url = urlparse(request.host_url)
@@ -83,3 +108,20 @@ def get_redirect_target():
     next_url = request.values.get('next')
     if next_url and is_safe_url(next_url):
         return next_url
+
+def load_configs():
+    """
+    Loads handler configs from CONF_DIR
+
+    """
+    data = {}
+    config_dir = getattr(config, 'CONF_DIR')
+    for cfg in os.listdir(config_dir):
+        fname, ext = os.path.splitext(cfg)
+        if ext == '.cfg':
+            try:
+                c = json.loads(open(os.path.join(config_dir, cfg)).read())
+                data[c.get('name')] = c
+            except Exception, e:
+                print(e)
+    return data
